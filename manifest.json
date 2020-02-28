@@ -1,0 +1,45 @@
+    
+{
+    "manifest_version": 2,
+    "name": "System Font Everywhere",
+    "short_name": "SF Everywhere",
+    "version": "0.0.1",
+    "description": "Use system font on the web",
+
+
+    "browser_action": {
+        "default_title": "System Font Everywhere",
+        "default_icon": "off-icon.png"
+    },
+
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+
+    "permissions": [
+        "storage",
+        "activeTab",
+        "bookmarks"
+        ],
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "match_about_blank": true,
+            "matches": [
+                "<all_urls>"
+            ],
+            "run_at": "document_start",
+            "exclude_globs": [
+                "*/chrome/newtab*"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "icons": {
+        "128": "128.png"
+    }
+    
+}
