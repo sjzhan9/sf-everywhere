@@ -11,6 +11,7 @@ chrome.tabs.query({"currentWindow": true}, function (tabs) {
     }
 })
 
+
 //when new tab activated, check isOn to toggle the change
 chrome.tabs.onActivated.addListener(function (info) {
     chrome.tabs.query({"active": true}, function (tabs) {
@@ -20,11 +21,13 @@ chrome.tabs.onActivated.addListener(function (info) {
 })
 
 //on new tab visit and refreshed check state
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    console.log(tabId + "tab updated");
-            if (tab.url) {
-                updateTab(tabId);
+chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+    console.log("tab " + tabId + " updated");
+    if (tab.url) {
+        if (info.status === 'complete') {
+            updateTab(tabId);
             }
+    }
 })
 
 function updateTab(id){
@@ -43,9 +46,13 @@ chrome.browserAction.onClicked.addListener(function (tab) {
     if (!isOn) {
         turnOn();
         chrome.tabs.sendMessage(id, 'turnOn');
+        console.log("sent message to turn on")
+
     } else {
         turnOff();
         chrome.tabs.sendMessage(id, 'turnOff');
+        console.log("sent message to turn off")
+
     }
 })
 
@@ -61,6 +68,7 @@ function turnOff(){
     chrome.browserAction.setTitle({title: 'SF OFF'}, function(){
         updateOffIcon();
     })
+
 }
 
 function updateOnIcon(){
@@ -95,6 +103,15 @@ function isDarkModeEnabled() {
 let lastDarkModeStatus = isDarkModeEnabled();
 
 setInterval(function(){
+    // chrome.tabs.query({"currentWindow": true}, function (tabs) {
+    //     for (tab of tabs) {
+    //         if (tab.url) {
+    //             let id = tab.id;
+    //             updateTab(id);
+    //             console.log("update fired")
+    //         }
+    //     }
+    // })
 
     if (lastDarkModeStatus !== isDarkModeEnabled()){
         //make update
