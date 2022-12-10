@@ -1,6 +1,5 @@
 let isOn = false;
 
-//make updates
 //update all tabs
 chrome.tabs.query({ currentWindow: true }, function (tabs) {
   for (tab of tabs) {
@@ -76,48 +75,13 @@ function turnOff() {
 }
 
 function updateOnIcon() {
-  if (isDarkModeEnabled() == false) {
-    chrome.action.setIcon({
-      path: "on-icon.png",
-    });
-  } else {
-    chrome.action.setIcon({
-      path: "on-icon-dark.png",
-    });
-  }
+  chrome.action.setIcon({
+    path: "on-icon.png",
+  });
 }
 
 function updateOffIcon() {
-  if (isDarkModeEnabled() == false) {
-    chrome.action.setIcon({
-      path: "off-icon.png",
-    });
-  } else {
-    chrome.action.setIcon({
-      path: "off-icon-dark.png",
-    });
-  }
+  chrome.action.setIcon({
+    path: "off-icon.png",
+  });
 }
-
-//check darkmode update everytime switch tab and 500ms
-function isDarkModeEnabled() {
-  return (
-    chrome.windows.getCurrent.matchMedia &&
-    chrome.windows.getCurrent.matchMedia("(prefers-color-scheme: dark)").matches
-  );
-}
-
-let lastDarkModeStatus = isDarkModeEnabled();
-
-setInterval(function () {
-  if (lastDarkModeStatus !== isDarkModeEnabled()) {
-    //make update
-    if (!isOn) {
-      updateOffIcon();
-    } else {
-      updateOnIcon();
-    }
-    //update state
-    lastDarkModeStatus = isDarkModeEnabled();
-  }
-}, 500);
